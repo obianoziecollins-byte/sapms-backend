@@ -139,4 +139,4 @@ CSRF_TRUSTED_ORIGINS = ['http://localhost:3000',
                         'http://127.0.0.1:8000',
                         'http://localhost:5173',
                         'https://sapms-backend.onrender.com',
-                        'https://sapms-frontend.vercel.app/']
+                        'https://sapms-frontend.vercel.app']
