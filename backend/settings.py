@@ -28,9 +28,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-(7uz_!dtzixo487n2y+o_9z1xi&=_nwh2i^cuonavz^m4&2o3m'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.ngrok-free.dev', '.ngrok-free.app']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.onrender.com',]
 
 
 # Application definition
@@ -135,4 +135,8 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 CORS_ALLOW_ALL_ORIGINS = True
-CSRF_TRUSTED_ORIGINS = ['http://localhost:3000', 'http://127.0.0.1:8000', 'http://localhost:5173']
+CSRF_TRUSTED_ORIGINS = ['http://localhost:3000',
+                        'http://127.0.0.1:8000',
+                        'http://localhost:5173',
+                        'https://sapms-backend.onrender.com',
+                        'https://sapms-frontend.vercel.app/']
