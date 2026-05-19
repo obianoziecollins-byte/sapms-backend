@@ -13,21 +13,26 @@ class StudentProfileList(generics.ListCreateAPIView):
     permission_classes = [permissions.AllowAny]
 
 
+from django.db import transaction
+
 @api_view(['POST'])
 def register_student(request):
     data = request.data
     try:
-        full_name = data.get('full_name', '').strip()
-        parts     = full_name.split(' ', 1)
-        user = User.objects.create_user(
-            username=data['username'], password=data['password'],
-            email=data.get('email', ''),
-            first_name=parts[0], last_name=parts[1] if len(parts) > 1 else '',
-        )
-        profile = user.profile
-        profile.student_id     = data['student_id']
-        profile.specialization = data['specialization']
-        profile.save()
+        with transaction.atomic():
+            full_name = data.get('full_name', '').strip()
+            parts = full_name.split(' ', 1)
+            user = User.objects.create_user(
+                username=data['username'],
+                password=data['password'],
+                email=data.get('email', ''),
+                first_name=parts[0],
+                last_name=parts[1] if len(parts) > 1 else '',
+            )
+            profile, _ = StudentProfile.objects.get_or_create(user=user)
+            profile.student_id    = data['student_id']
+            profile.specialization = data['specialization']
+            profile.save()
         return Response({"message": "Registration successful!"}, status=201)
     except Exception as e:
         return Response({"error": str(e)}, status=400)
