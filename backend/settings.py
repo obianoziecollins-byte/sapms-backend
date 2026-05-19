@@ -135,6 +135,16 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'origin',
+    'x-requested-with',
+]
 CSRF_TRUSTED_ORIGINS = ['http://localhost:3000',
                         'http://127.0.0.1:8000',
                         'http://localhost:5173',
