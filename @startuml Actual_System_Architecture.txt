@@ -1,0 +1,68 @@
+@startuml Actual_System_Architecture
+!theme plain
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam backgroundColor #FFFFFF
+skinparam ArrowColor #003366
+skinparam ArrowFontSize 10
+skinparam packageBorderColor #003366
+skinparam packageBackgroundColor #F2F5F9
+skinparam rectangleBorderColor #003366
+skinparam rectangleBackgroundColor #E8EEF5
+skinparam databaseBorderColor #1A7A4A
+skinparam databaseBackgroundColor #E6F4ED
+skinparam noteBorderColor #D97706
+skinparam noteBackgroundColor #FDF3DC
+
+' ── Presentation Layer ────────────────────────────────────────────────────────
+package "Presentation Layer" {
+  rectangle "React SPA\n(Deployed — Vercel)" as M1UI
+  rectangle "React SPA\n(Local)" as M2UI
+  rectangle "Jinja2 + Tailwind CSS\n(Local)" as M3UI
+}
+
+' ── Module 1 ──────────────────────────────────────────────────────────────────
+package "Module 1: Student Academic Profiling & Management System" {
+  rectangle "Django REST Framework\n(Deployed — Render)" as M1BE
+  rectangle "Rule-Based Validation Engine\n5 Rules: probation · credit overload\nlevel mismatch · failed grade · prerequisite" as M1Rules
+}
+
+' ── Module 2 ──────────────────────────────────────────────────────────────────
+package "Module 2: AI-Based Academic & Career Advising System" {
+  rectangle "Node.js Server\n(Local)" as M2BE
+  rectangle "Rule-Based Recommendation Engine\nCourse eligibility · Career path mapping\n(5 career paths — if-then logic)" as M2Rules
+  rectangle "Gemini LLM Chatbot\n[API not provisioned — pending]" as M2Chat #FFE8E8
+}
+
+' ── Module 3 ──────────────────────────────────────────────────────────────────
+package "Module 3: Academic Performance Monitoring & Risk Analysis System" {
+  rectangle "Python / Flask Server\n(Local)" as M3BE
+  rectangle "Rule-Based Risk Scoring Engine\nConfigurable CGPA thresholds\nLow / Medium / High risk classification" as M3Rules
+}
+
+' ── Data Layer ────────────────────────────────────────────────────────────────
+package "Data Layer" {
+  database "Supabase — PostgreSQL\n(Shared: Modules 1 & 2)\n\nauth_user · studentprofile\ncourses · enrollments · prerequisites\nstudents · academic_records\nrisk_analysis · risk_rules" as SharedDB
+  
+}
+
+' ── Connections ───────────────────────────────────────────────────────────────
+M1UI --> M1BE : REST API calls\n(Axios / HTTPS)
+M1BE --> M1Rules : validates on\nprofile update
+M1BE --> SharedDB : read / write\nprofile & enrollment data
+
+M2UI --> M2BE : HTTP requests
+M2BE --> M2Rules : generates course\n& career recommendations
+M2BE ..> M2Chat : planned integration
+M2BE --> SharedDB : reads / write\ncareer recommendations & academic records
+
+M3UI --> M3BE : HTTP requests
+M3BE --> M3Rules : runs on\nCSV import
+M3BE --> SharedDB : read / write\n Risk analysis data
+
+
+
+
+
+
+@enduml

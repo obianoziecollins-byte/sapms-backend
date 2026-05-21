@@ -85,7 +85,8 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 # Supabase URI
-DATABASE_URL = "postgresql://postgres.[YOUR-PROJECT-ID]:[Nileguru@123!]@aws-0-[REGION].pooler.supabase.com:6543/postgres"
+DATABASE_URL = "postgresql://postgres.[kygunohajbfvrpkhdzzt]:[Nileguru@123!]@aws-0-[eu-west-1].pooler.supabase.com:6543/postgres"
+
 
 DATABASES = {
     'default': {

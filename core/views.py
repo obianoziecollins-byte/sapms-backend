@@ -22,6 +22,8 @@ def register_student(request):
         with transaction.atomic():
             full_name = data.get('full_name', '').strip()
             parts = full_name.split(' ', 1)
+            
+            # 1. Create the base Auth User
             user = User.objects.create_user(
                 username=data['username'],
                 password=data['password'],
@@ -29,12 +31,22 @@ def register_student(request):
                 first_name=parts[0],
                 last_name=parts[1] if len(parts) > 1 else '',
             )
-            profile, _ = StudentProfile.objects.get_or_create(user=user)
-            profile.student_id    = data['student_id']
+            
+            # 2. Safely fetch or manually create the profile, handling existing signals gracefully
+            profile, created = StudentProfile.objects.get_or_create(user=user)
+            
+            # 3. Explicitly assign the incoming form data
+            profile.student_id = data['student_id']
             profile.specialization = data['specialization']
+            # If your model requires a default department, explicitly set it here if missing:
+            if not profile.department:
+                profile.department = "Faculty of Computing"
+                
             profile.save()
+            
         return Response({"message": "Registration successful!"}, status=201)
     except Exception as e:
+        # This will send the exact database error string back to React so you can see it
         return Response({"error": str(e)}, status=400)
 
 
